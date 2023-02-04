@@ -3,18 +3,19 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+# ---- PAGE CONFIG ----
+st.set_page_config(
+    page_title="CNU Basketball Data Dashboard",
+    page_icon="🏀",
+    layout='wide',
+    initial_sidebar_state='collapsed'
+)
+
 # --- CONSTANTS ---
 table_cols = [
 'opponent','date','cnu_score','opp_score','ast','fg%','fga','fgm','3fgm','3fga','3pt%','ft%','fta','ftm','def','off','tot','pf','stl','t/o','blk','opp_ast','opp_fgm','opp_fga','opp_fg%','opp_3fgm','opp_3fga','opp_3pt%','opp_ft%','opp_fta','opp_ftm','opp_def','opp_off','opp_tot','opp_pf','opp_stl','opp_t/o','opp_blk','ast_diff','fg%_diff','fga_diff','fgm_diff','3fga_diff','3fgm_diff','3pt%_diff','ft%_diff','fta_diff','ftm_diff','def_diff','off_diff','tot_diff', 'pf_diff','stl_diff','t/o_diff','blk_diff'
 ]
 
-# ---- PAGE CONFIG ----
-st.set_page_config(
-    page_title="CNU Basketball Data Dashboard",
-    page_icon=":basketball:",
-    layout='wide',
-    initial_sidebar_state='collapsed'
-)
 
 # ---- DATA IMPORT ----
 @st.cache

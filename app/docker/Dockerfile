@@ -16,5 +16,3 @@ RUN pip3 install -r requirements.txt
 # --- Copy all files from local project to Docker Image
 COPY . .
 
-# --- Command to run streamlit application
-CMD streamlit run app/app.py
