@@ -6,6 +6,9 @@ from scrape_data import scrape_data
 #---- SCRAPE DATA TO DISK ----
 scrape_data()
 
+#---- LOG MESSAGE
+print('STARTING DATA CLEANING...')
+
 #---- GLOBAL VARIABLES USED LATER ----
 dtypes = {
 'off'       : 'int8',
@@ -226,3 +229,6 @@ combined_df.opponent = combined_df.opponent.replace(duplicates)
 combined_df = combined_df.reindex(sorted(combined_df.columns), axis=1)
 
 combined_df.to_csv('output/csv/cleaned_data.csv', index=False)
+
+#---- LOG MESSAGE
+print('DATA CLEANING COMPLETE...')

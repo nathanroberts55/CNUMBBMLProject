@@ -10,6 +10,9 @@ DIR_LIST = ['output', 'output/html', 'output/csv', 'output/processed_data', 'out
 
 #---- FUNCTION TO GET DATA ----
 def scrape_data():
+    # Log Message
+    print('STARTING DATA SCRAPE....')
+    
     #---- CREATE FILE STRUCTURE ----
     for dir in DIR_LIST:
         if not os.path.exists(dir):
@@ -116,3 +119,6 @@ def scrape_data():
     #---- SAVE DATAFRAMES TO CSV
     cnu_stats.to_csv(f"{DIR_LIST[2]}/cnuStats.csv", index=False)
     opp_stats.to_csv(f"{DIR_LIST[2]}/oppStats.csv", index=False)
+    
+    # Log Message
+    print('DATA SCRAPE COMPLETE...')
