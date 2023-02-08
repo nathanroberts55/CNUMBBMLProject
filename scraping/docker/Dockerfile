@@ -2,13 +2,16 @@
 FROM python:3
 
 # --- Update Container
-RUN apt-get update && apt-get -y install cron vim busybox locales
+RUN apt-get update && apt-get -y install cron vim busybox locales dos2unix
 
 # --- Set Working Directory
 WORKDIR /scraping
 
 # --- Copy the crontab to the container
 COPY crontab /etc/cron.d/crontab
+
+# --- Remove the DOS Endline Character from the crontab script
+RUN dos2unix /etc/cron.d/crontab && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
 
 # --- Change Execution settings of crontab
 RUN chmod 0644 /etc/cron.d/crontab

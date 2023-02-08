@@ -3,9 +3,11 @@ import os
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 #---- CONSTANTS ----
-YEARS = [x for x in range(2010,2022) if x not in [2020]]
+END_CURRENT_SEASON = datetime.now().year + 1 if datetime.now().month > 10 else datetime.now().year
+YEARS = [x for x in range(2010,END_CURRENT_SEASON) if x not in [2020]]
 TEAM_STATS_URL = "https://static.cnusports.com/custompages/mbball/Stats/{}/teamgbg.htm"
 DIR_LIST = ['output', 'output/html', 'output/csv', 'output/processed_data', 'output/models', 'output/joblib']
 
@@ -21,13 +23,9 @@ def scrape_data():
             print(f'Created Path at: {dir}')
         else:
             print(f'Directory at {dir} already exists, skipping...')
-    
-    # If data has already been scraped cancel run      
-    if len(os.listdir(DIR_LIST[2])) > 0:
-        print('Data has been scraped.')
-        return
             
-
+    # TODO: Update to only scrape the current season if the other seasons already exists
+     
     #---- SCRAPE WEB PAGES, SAVE TO DISK ----
     for year in YEARS:
         url = TEAM_STATS_URL.format(f"{year}-{year + 1}")
