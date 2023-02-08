@@ -2,7 +2,7 @@
 FROM python:3
 
 # --- Update Container
-RUN apt-get update && apt-get -y install cron vim
+RUN apt-get update && apt-get -y install cron vim busybox locales
 
 # --- Set Working Directory
 WORKDIR /scraping
@@ -13,9 +13,6 @@ COPY crontab /etc/cron.d/crontab
 # --- Change Execution settings of crontab
 RUN chmod 0644 /etc/cron.d/crontab
 
-# Not sure what this does yet honestly...
-RUN /usr/bin/crontab /etc/cron.d/crontab
-
 # --- Copy the Python Files to the container
 COPY data_cleaning.py /scraping/data_cleaning.py
 COPY scrape_data.py /scraping/scrape_data.py
@@ -24,7 +21,12 @@ COPY scrape_data.py /scraping/scrape_data.py
 COPY requirements.txt ./requirements.txt
 
 # --- Run command line instructions
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
-# --- Prints the Python Path
-RUN echo $PYTHONPATH
+# --- Make Python file executable
+RUN chmod 0744 /scraping/data_cleaning.py
+
+# --- Runs the Cron Service
+RUN /usr/bin/crontab /etc/cron.d/crontab
+
+CMD  busybox syslogd -C; cron -L 2 -f

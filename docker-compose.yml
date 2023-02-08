@@ -33,11 +33,12 @@ services:
       dockerfile: docker/Dockerfile
     platform: linux/amd64
     restart: unless-stopped
-    command: ["cron", "-f"]
+    environment:
+    - PYTHONUNBUFFERED=1
     volumes:
       - ./output:/scraping/output
     ports:
-      - 80:80
+      - 8080:8080
 
 volumes:
   output:
