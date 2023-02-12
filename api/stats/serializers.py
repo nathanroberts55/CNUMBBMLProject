@@ -4,28 +4,11 @@ from rest_framework_json_api import serializers
 from rest_framework import status
 from rest_framework.exceptions import APIException
 
-class StatLineSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Stat_Line
-        fields = (
-            'date',
-            'team_1',
-            'team_2',
-            'season_year'
-        )
-class GameSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Game
-        fields = (
-            'stat_line'
-        )
 class PlayerSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Player
         fields = (
+            'id',
             'full_name',
             'class_name',
             'height',
@@ -34,25 +17,51 @@ class PlayerSerializer(serializers.ModelSerializer):
             'jersey_num',
             'hometown_hs',
         )
-class TeamSerializer(serializers.ModelSerializer):
     
+class CoachSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Coach
+        fields = (
+            'id',
+            'name',
+        )
+class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
         fields = (
-            'name'
+            'id',
+            'name',
+            'players',
+        )
+class GameSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Game
+        fields = (
+            'id',
+            'teams'
         )
 class SeasonSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Season
         fields = (
-            'stat_line'
+            'start_year',
+            'end_year',
+            'games',
         )
-class CoachSerializer(serializers.ModelSerializer):
-    
+class StatLineSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Coach
-        fields = (
-            'name',
-            'team'
-        )
+        model = Stat_Line
+        # fields = (
+        #     'date',
+        #     'team_1',
+        #     'team_2',
+        #     'season_year'
+        # )
+        exclude = ['id', 
+                   'activate_date', 
+                   'deactivate_date',
+                   'status'
+                   ]

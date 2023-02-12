@@ -7,12 +7,11 @@ from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.mixins import ListModelMixin,UpdateModelMixin,RetrieveModelMixin
+from rest_framework.mixins import ListModelMixin,UpdateModelMixin,RetrieveModelMixin,CreateModelMixin
 
 # Create your views here.
 class StatLineViewSet(
-        ListModelMixin,
-        RetrieveModelMixin, 
+        CreateModelMixin,
         viewsets.GenericViewSet
         ):
     """
@@ -23,7 +22,8 @@ class StatLineViewSet(
     
 class GameViewSet(
         ListModelMixin,
-        RetrieveModelMixin, 
+        RetrieveModelMixin,
+        CreateModelMixin, 
         viewsets.GenericViewSet
         ):
     """
@@ -34,7 +34,8 @@ class GameViewSet(
     
 class PlayerViewSet(
         ListModelMixin,
-        RetrieveModelMixin, 
+        RetrieveModelMixin,
+        CreateModelMixin, 
         viewsets.GenericViewSet
         ):
     """
@@ -45,7 +46,8 @@ class PlayerViewSet(
     
 class TeamViewSet(
         ListModelMixin,
-        RetrieveModelMixin, 
+        RetrieveModelMixin,
+        CreateModelMixin, 
         viewsets.GenericViewSet
         ):
     """
@@ -56,7 +58,8 @@ class TeamViewSet(
     
 class SeasonViewSet(
         ListModelMixin,
-        RetrieveModelMixin, 
+        RetrieveModelMixin,
+        CreateModelMixin, 
         viewsets.GenericViewSet
         ):
     """
@@ -67,7 +70,8 @@ class SeasonViewSet(
     
 class CoachViewSet(
         ListModelMixin,
-        RetrieveModelMixin, 
+        RetrieveModelMixin,
+        CreateModelMixin, 
         viewsets.GenericViewSet
         ):
     """
