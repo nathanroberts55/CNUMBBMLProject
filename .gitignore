@@ -173,4 +173,7 @@ poetry.toml
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 
+# Ignore devcontainers
 .devcontainer/
+# Ignore Django Models Migrations
+api/*/migrations/
