@@ -4,7 +4,23 @@ from rest_framework_json_api import serializers
 from rest_framework import status
 from rest_framework.exceptions import APIException
 
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = (
+            'id',
+            'name',
+            'players'
+        )
+class TeamPlayerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = (
+            'id',
+            'name',
+        )
 class PlayerSerializer(serializers.ModelSerializer):
+    team_name = TeamPlayerSerializer(Team.objects.all(), source='team_set', many=True)
     class Meta:
         model = Player
         fields = (
@@ -16,23 +32,7 @@ class PlayerSerializer(serializers.ModelSerializer):
             'position',
             'jersey_num',
             'hometown_hs',
-        )
-    
-class CoachSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Coach
-        fields = (
-            'id',
-            'name',
-        )
-class TeamSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Team
-        fields = (
-            'id',
-            'name',
-            'players',
+            'team_name',
         )
 class GameSerializer(serializers.ModelSerializer):
     

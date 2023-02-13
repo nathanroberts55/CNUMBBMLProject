@@ -11,9 +11,6 @@ class StatLineAdmin(admin.ModelAdmin):
 @admin.register(models.Team)
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('name', 'id', )
-@admin.register(models.Coach)
-class CoachAdmin(admin.ModelAdmin):
-    list_display = ('name','id', )
 @admin.register(models.Player)
 class PlayerAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'position', 'jersey_num', 'id',)

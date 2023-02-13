@@ -24,7 +24,6 @@ router.register(r'player', stats_views.PlayerViewSet, basename='player')
 router.register(r'game', stats_views.GameViewSet, basename='game')
 router.register(r'team', stats_views.TeamViewSet, basename='team')
 router.register(r'season', stats_views.SeasonViewSet, basename='season')
-router.register(r'coach', stats_views.CoachViewSet, basename='coach')
 
 urlpatterns = router.urls
 

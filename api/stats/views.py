@@ -68,14 +68,3 @@ class SeasonViewSet(
     queryset = Season.objects.all()
     serializer_class = SeasonSerializer
     
-class CoachViewSet(
-        ListModelMixin,
-        RetrieveModelMixin,
-        CreateModelMixin, 
-        viewsets.GenericViewSet
-        ):
-    """
-    A simple ViewSet for listing or retrieving Coachs.
-    """
-    queryset = Coach.objects.all()
-    serializer_class = CoachSerializer

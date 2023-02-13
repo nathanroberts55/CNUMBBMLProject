@@ -33,26 +33,6 @@ class Player(
     def __str__(self):
         return self.full_name
 
-# --- Coach Table ---
-class Coach(
-    TimeStampedModel,
-    ActivatorModel ,
-    Model):
-    
-    class Meta:
-        verbose_name = 'Coach'
-        verbose_name_plural = 'Coaches'
-        ordering = ["id"]
-    
-    #--- Foreign Keys ---
-    # team = models.ForeignKey(Team, on_delete=models.CASCADE)
-    
-    #--- Model Fields ---
-    name = models.CharField(max_length=50)
-    
-    def __str__(self) -> str:
-        return self.name
-    
 # --- Team Table ---
 class Team(
     TimeStampedModel,
@@ -65,9 +45,7 @@ class Team(
         ordering = ["id"]
         
     #--- Foreign Keys ---
-    # stat_line = models.ForeignKey(Stat_Line, on_delete=models.CASCADE)
     players = models.ManyToManyField(Player)
-    coach = models.ForeignKey(Coach, related_name='team', on_delete=models.CASCADE)
     
     #--- Model Fields ---
     name = models.CharField(null=False, max_length=50)
@@ -88,11 +66,10 @@ class Game(
     
     #--- Foreign Keys ---
     teams = models.ManyToManyField(Team)
-    # stat_line = models.ForeignKey(Stat_Line, on_delete=models.CASCADE)
+
     
     #--- Model Fields ---
-    # team_1 = models.CharField(max_length=50)
-    # team_2 = models.CharField(max_length=50)
+
     
     # def __str__(self):
     #     return f'{self.team_1} vs. {self.team_2}'    
@@ -111,7 +88,6 @@ class Season(
         ordering = ["id"]
     
     #--- Foreign Keys ---
-    # stat_line = models.ForeignKey(Stat_Line, on_delete=models.CASCADE)
     games = models.ManyToManyField(Game)
     
     #--- Model Fields ---
@@ -138,9 +114,6 @@ class Stat_Line(
   
     #--- Model Fields ---
     date = models.DateField()
-    # team_1 = models.CharField(max_length=50)
-    # team_2 = models.CharField(max_length=50)
-    # season_year = models.CharField(max_length=50)
     fgm = models.IntegerField()
     fga = models.IntegerField()
     fg_pct = models.DecimalField(max_digits=3, decimal_places=3)
