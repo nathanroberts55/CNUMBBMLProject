@@ -4,7 +4,7 @@ import datetime
 from enum import Enum, IntEnum
 from sqlmodel import Field, Relationship, SQLModel
 
-# -- Choices as Enums
+# === Choices as Enums ===
 class ClassEnum(str, Enum):
     freshman = 'Fr.'
     sophomore = 'So.'
@@ -19,8 +19,9 @@ class PositionEnum(str, Enum):
     power_forward = 'PF'
     center = 'C'
 
-# -- Models
+# === Models ===
         
+# === Player Models ===
 class TeamBase(SQLModel):
     name: str
 
@@ -41,6 +42,10 @@ class TeamCreate(TeamBase):
 class TeamRead(TeamBase):
     id: UUID
 
+class TeamUpdate(SQLModel):
+    name: Optional[str] = None
+
+# === Player Models ===
 class PlayerBase(SQLModel):
     full_name: str 
     class_name: ClassEnum 
@@ -66,7 +71,17 @@ class PlayerCreate(PlayerBase):
 
 class PlayerRead(PlayerBase):
     id: UUID       
+    
+class PlayerUpdate(SQLModel):
+    full_name: Optional[str] = None
+    class_name: Optional[ClassEnum] = None
+    position: Optional[PositionEnum] = None
+    height: Optional[str] = None
+    weight: Optional[str] = None
+    hometown_hs:Optional[str] = None
+    jersey_num: Optional[int] = None
 
+# === Season Models ===
 class SeasonBase(SQLModel):
     start_year: int
     end_year: int
@@ -86,7 +101,12 @@ class SeasonCreate(SeasonBase):
 
 class SeasonRead(SeasonBase):
     id: UUID
- 
+
+class SeasonUpdate(SQLModel):
+    start_year: Optional[int] = None
+    end_year: Optional[int] = None
+
+# === Game Models ===   
 class GameBase(SQLModel):
     date: datetime.date
     
@@ -108,6 +128,10 @@ class GameCreate(GameBase):
 class GameRead(GameBase):
     id: UUID
 
+class GameUpdate(SQLModel):
+    date: Optional[datetime.date] = None
+    
+# === Stat Line Models ===
 class StatLineBase(SQLModel):
     date: datetime.date
     fgm: int = Field(default=0)
@@ -139,6 +163,8 @@ class StatLine(StatLineBase, table=True):
     # Relationships
     player_id: Optional[UUID] = Field(default=None, foreign_key="players.id")
     game_id: Optional[UUID] = Field(default=None, foreign_key="games.id")
+    season_id: Optional[UUID] = Field(default=None, foreign_key="seasons.id")
+    team_id: Optional[UUID] = Field(default=None, foreign_key="teams.id")
     
 class StatLineCreate(StatLineBase):
     pass
@@ -146,7 +172,28 @@ class StatLineCreate(StatLineBase):
 class StatLineRead(StatLineBase):
     id: UUID
     
-# -- Relational Models
+class StatLineUpdate(SQLModel):
+    date: Optional[datetime.date] = None
+    fgm: Optional[int] = None
+    fga: Optional[int] = None
+    fg_pct: Optional[float] = None
+    three_fgm: Optional[int] = None
+    three_fga: Optional[int] = None
+    three_pt_pct: Optional[float] = None
+    ftm: Optional[int] = None
+    fta: Optional[int] = None
+    ft_pct: Optional[float] = None
+    off_reb: Optional[int] = None
+    def_reb: Optional[int] = None
+    tot_reb: Optional[int] = None
+    pf: Optional[int] = None
+    ast: Optional[int] = None
+    to: Optional[int] = None
+    blk: Optional[int] = None
+    stl: Optional[int] = None
+    pts: Optional[int] = None
+    
+# === Relational Model Views ===
 
 class PlayerReadWithTeam(PlayerRead):
     team: Optional[TeamRead] = None
