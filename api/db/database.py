@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, create_engine
 from .models import *
 # UIsing SQLite here but can easily use PostgreSQL by changing the url
-sqlite_file_name = "stats.sqlite3"
+sqlite_file_name = "db.sqlite3"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 connect_args = {"check_same_thread": False}
 
