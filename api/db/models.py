@@ -29,12 +29,11 @@ class Team(TeamBase, table=True):
     __tablename__ = "teams"
     
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
-    created_by: datetime.datetime = Field(default=datetime.datetime.utcnow())
+    created_on: datetime.datetime = Field(default=datetime.datetime.utcnow())
     last_modified: datetime.datetime = Field(default=datetime.datetime.utcnow())
     
     # Relationships
     players: Optional[List["Player"]] = Relationship(back_populates="team")
-    # games: Optional[List["Game"]] = Relationship(back_populates="teams")
 
 class TeamCreate(TeamBase):
     pass
@@ -55,19 +54,19 @@ class Player(PlayerBase, table=True):
     __tablename__ = "players"
     
     id: Optional[UUID]  = Field(default_factory=uuid4, primary_key=True)
-    created_by: datetime.datetime = Field(default=datetime.datetime.utcnow())
+    created_on: datetime.datetime = Field(default=datetime.datetime.utcnow())
     last_modified: datetime.datetime = Field(default=datetime.datetime.utcnow())
     
     # Relationships
-    team_id: Optional[UUID]  = Field(default_factory=uuid4, foreign_key="teams.id")
+    team_id: Optional[UUID]  = Field(default=None, foreign_key="teams.id")
     team: Optional[Team] = Relationship(back_populates='players')
 
 class PlayerCreate(PlayerBase):
-    pass       
+    team_name:str       
 
 class PlayerRead(PlayerBase):
     id: UUID       
-    
+
 class SeasonBase(SQLModel):
     start_year: int
     end_year: int
@@ -76,7 +75,7 @@ class Season(SeasonBase, table=True):
     __tablename__ = "seasons"
     
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
-    created_by: datetime.datetime = Field(default=datetime.datetime.utcnow())
+    created_on: datetime.datetime = Field(default=datetime.datetime.utcnow())
     last_modified: datetime.datetime = Field(default=datetime.datetime.utcnow())
     
     # Relationships.
@@ -95,13 +94,13 @@ class Game(GameBase, table=True):
     __tablename__ = "games"
     
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
-    created_by: datetime.datetime = Field(default=datetime.datetime.utcnow())
+    created_on: datetime.datetime = Field(default=datetime.datetime.utcnow())
     last_modified: datetime.datetime = Field(default=datetime.datetime.utcnow())
     
     # Relationships
-    season_id: Optional[UUID] = Field(default_factory=uuid4, foreign_key="seasons.id")
+    season_id: Optional[UUID] = Field(default=None, foreign_key="seasons.id")
     season: Optional[Season] = Relationship(back_populates='games')
-    teams_id: Optional[List[UUID]] = Field(default_factory=uuid4, foreign_key="teams.id")
+    teams_id: Optional[List[UUID]] = Field(default=None, foreign_key="teams.id")
 
 class GameCreate(GameBase):
     pass
@@ -134,12 +133,12 @@ class StatLine(StatLineBase, table=True):
     __tablename__ = "statLines"
     
     id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
-    created_by: datetime.datetime = Field(default=datetime.datetime.utcnow())
+    created_on: datetime.datetime = Field(default=datetime.datetime.utcnow())
     last_modified: datetime.datetime = Field(default=datetime.datetime.utcnow())
     
     # Relationships
-    player_id: Optional[UUID] = Field(default_factory=uuid4, foreign_key="players.id")
-    game_id: Optional[UUID] = Field(default_factory=uuid4, foreign_key="games.id")
+    player_id: Optional[UUID] = Field(default=None, foreign_key="players.id")
+    game_id: Optional[UUID] = Field(default=None, foreign_key="games.id")
     
 class StatLineCreate(StatLineBase):
     pass
@@ -150,17 +149,17 @@ class StatLineRead(StatLineBase):
 # -- Relational Models
 
 class PlayerReadWithTeam(PlayerRead):
-    team: Optional[Team]
+    team: Optional[TeamRead] = None
     
 class TeamReadWithPlayers(TeamRead):
-    players: Optional[List["Player"]]
+    players: Optional[List[PlayerRead]] = []
 
 class GamesReadWithTeams(GameRead):
-    teams_id: Optional[List[UUID]]
+    teams_id: Optional[List[TeamRead]] = []
 
 class SeasonReadWithGames(SeasonRead):
-    games: Optional[List["Game"]]
+    games: Optional[List[GameRead]] = []
 
 class StatLineReadWithPlayerAndTeam(StatLineRead):
-    game_id: Optional[UUID]
-    player_id: Optional[UUID]
+    game_id: Optional[GameRead] = None
+    player_id: Optional[PlayerRead] = None

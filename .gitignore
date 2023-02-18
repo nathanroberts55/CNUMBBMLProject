@@ -177,3 +177,6 @@ poetry.toml
 .devcontainer/
 # Ignore Django Models Migrations
 api/*/migrations/
+*.sqlite
+*.sqlite3
+stats.sqlite3
