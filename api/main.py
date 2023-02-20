@@ -145,7 +145,7 @@ def read_seasons(*, session: Session = Depends(get_session)):
     seasons = session.exec(select(Season)).all()
     return seasons
 
-@app.get("/seasons/{season_id}", response_model=SeasonReadWithGames)
+@app.get("/seasons/{season_id}", response_model=SeasonRead)
 def read_season(*, session: Session = Depends(get_session), season_id: UUID):
     season = session.get(Season, season_id)
     if not season:
