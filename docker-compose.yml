@@ -21,9 +21,9 @@ services:
       dockerfile: docker/Dockerfile
     platform: linux/amd64
     restart: unless-stopped
-    command: python manage.py runserver 0.0.0.0:8000
+    command: uvicorn main:app --host 0.0.0.0 --port 80
     ports:
-      - 8000:8000
+      - 80:80
     env_file:
       - .env
 
