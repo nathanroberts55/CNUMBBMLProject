@@ -93,9 +93,6 @@ class Season(SeasonBase, table=True):
     created_on: datetime.datetime = Field(default=datetime.datetime.utcnow())
     last_modified: datetime.datetime = Field(default=datetime.datetime.utcnow())
     
-    # Relationships.
-    games: Optional[List["Game"]] = Relationship(back_populates="season")
-    
 class SeasonCreate(SeasonBase):
     pass
 
@@ -118,8 +115,6 @@ class Game(GameBase, table=True):
     last_modified: datetime.datetime = Field(default=datetime.datetime.utcnow())
     
     # Relationships
-    season_id: Optional[UUID] = Field(default=None, foreign_key="seasons.id")
-    season: Optional[Season] = Relationship(back_populates='games')
     teams_id: Optional[List[UUID]] = Field(default=None, foreign_key="teams.id")
 
 class GameCreate(GameBase):
@@ -203,9 +198,6 @@ class TeamReadWithPlayers(TeamRead):
 
 class GamesReadWithTeams(GameRead):
     teams_id: Optional[List[TeamRead]] = []
-
-class SeasonReadWithGames(SeasonRead):
-    games: Optional[List[GameRead]] = []
 
 class StatLineReadWithPlayerAndTeam(StatLineRead):
     game_id: Optional[GameRead] = None
