@@ -118,7 +118,19 @@ def read_game(*, session: Session = Depends(get_session), game_id: UUID):
 
 @app.post('/games/', response_model=GameRead)
 def create_game(*, session: Session = Depends(get_session), game: GameCreate):
+    
+    query_team_1 = select(Team.id).where(Team.name == game.team_1)
+    query_team_2 = select(Team.id).where(Team.name == game.team_2)
+    
+    team_1 = session.exec(query_team_1).first()
+    team_2 = session.exec(query_team_2).first()
+    
+    if not team_1 and not team_2:
+        raise HTTPException(status_code=404, detail="Team not found")
+    
     db_game = Game.from_orm(game)
+    db_game. team1_id = team_1
+    db_game. team2_id = team_2
     session.add(db_game)
     session.commit()
     session.refresh(db_game)
@@ -211,3 +223,19 @@ For example /players/2/stats will return all the statlines for the player with t
 Can let the front end handle the aggregation and math. That should hopefully reduce the need for any 
 preprocessing or query strings in the URL.
 """
+
+@app.get("/players/{player_id}/stats", response_model=PlayerWithStatLines)
+def get_players_stats(*, session: Session = Depends(get_session), player_id: UUID):
+    pass
+
+@app.get("/teams/{team_id}/stats", response_model=TeamWithStatLines)
+def get_teams_stats(*, session: Session = Depends(get_session), team_id: UUID):
+    pass
+
+@app.get("/seasons/{season_id}/stats", response_model=SeasonWithStatLines)
+def get_seasons_stats(*, session: Session = Depends(get_session), season_id: UUID):
+    pass
+
+@app.get("/games/{game_id}/stats", response_model=GameWithStatLines)
+def get_games_stats(*, session: Session = Depends(get_session), game_id: UUID):
+    pass
