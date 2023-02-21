@@ -214,6 +214,27 @@ def update_statline(*, session: Session = Depends(get_session),statline_id: UUID
     session.refresh(db_statline)
     return db_statline
 
+# === Game Stats Endpoint ===
+@app.get("/gamestats/")
+def read_gamestats(*, session: Session = Depends(get_session)):
+    gamestats = session.exec(select(GameStat)).all()
+    return gamestats
+
+@app.get("/gamestats/{gamestats_id}", response_model=GameStatRead)
+def read_gamestat(*, gamestat_id: int,  session: Session = Depends(get_session)):
+    gamestat = session.get(GameStat, gamestat_id)
+    if not gamestat:
+        raise HTTPException(status_code=404, detail="Game Stat not found")
+    return gamestat
+
+@app.post("/gamestats/", response_model=GameStatRead)
+def create_gamestat(*, gamestat: GameStatCreate, session: Session = Depends(get_session)):
+    db_gamestat = GameStat.from_orm(gamestat)
+    session.add(db_gamestat)
+    session.commit()
+    session.refresh(db_gamestat)
+    return db_gamestat
+
 
 # === Stat Endpoints ===
 """ 
@@ -224,18 +245,18 @@ Can let the front end handle the aggregation and math. That should hopefully red
 preprocessing or query strings in the URL.
 """
 
-@app.get("/players/{player_id}/stats", response_model=PlayerWithStatLines)
-def get_players_stats(*, session: Session = Depends(get_session), player_id: UUID):
-    pass
+# @app.get("/players/{player_id}/stats", response_model=PlayerWithStatLines)
+# def get_players_stats(*, session: Session = Depends(get_session), player_id: UUID):
+#     pass
 
-@app.get("/teams/{team_id}/stats", response_model=TeamWithStatLines)
-def get_teams_stats(*, session: Session = Depends(get_session), team_id: UUID):
-    pass
+# @app.get("/teams/{team_id}/stats", response_model=TeamWithStatLines)
+# def get_teams_stats(*, session: Session = Depends(get_session), team_id: UUID):
+#     pass
 
-@app.get("/seasons/{season_id}/stats", response_model=SeasonWithStatLines)
-def get_seasons_stats(*, session: Session = Depends(get_session), season_id: UUID):
-    pass
+# @app.get("/seasons/{season_id}/stats", response_model=SeasonWithStatLines)
+# def get_seasons_stats(*, session: Session = Depends(get_session), season_id: UUID):
+#     pass
 
-@app.get("/games/{game_id}/stats", response_model=GameWithStatLines)
-def get_games_stats(*, session: Session = Depends(get_session), game_id: UUID):
-    pass
+# @app.get("/games/{game_id}/stats", response_model=GameWithStatLines)
+# def get_games_stats(*, session: Session = Depends(get_session), game_id: UUID):
+#     pass
