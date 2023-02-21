@@ -1,9 +1,5 @@
 from typing import Union
-from db.game_model import *
-from db.team_model import *
-from db.player_model import *
-from db.season_model import *
-from db.statline_model import *
+from db.models import *
 from db.database import engine, create_db_and_tables
 from sqlmodel import Session, select
 from fastapi import FastAPI, HTTPException, Depends
