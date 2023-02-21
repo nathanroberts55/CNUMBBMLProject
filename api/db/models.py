@@ -196,6 +196,92 @@ class GameRead(GameBase):
 
 class GameUpdate(SQLModel):
     date: Optional[datetime.date] = None
+
+# === Game Stats Model ===   
+class GameStatBase(SQLModel):
+    three_fga: int
+    three_fga_diff: int
+    three_fgm: int
+    three_fgm_diff: float
+    three_pt_percent: float
+    three_pt_percent_diff: float
+    ast: int
+    ast_diff: int
+    blk: int
+    blk_diff: int
+    cnu_score: int
+    date: datetime.date
+    day: int
+    def_reb: int
+    def_diff: int
+    fg_percent: float
+    fg_percent_diff: float
+    fga: int
+    fga_diff: int
+    fgm: int
+    fgm_diff: int
+    ft_percent: float
+    ft_percent_diff: float
+    fta: int
+    fta_diff: int
+    ftm: int
+    ftm_diff: int
+    home: int
+    month: int
+    off_reb: int
+    off_diff: int
+    opp_three_fga: int
+    opp_three_fgm: int
+    opp_three_pt_percent: float
+    opp_ast: int
+    opp_blk: int
+    opp_def: int
+    opp_fg_percent: float
+    opp_fga: int
+    opp_fgm: int
+    opp_ft_percent: float
+    opp_fta: int
+    opp_ftm: int
+    opp_off: int
+    opp_pf: int
+    opp_ppg_avg: float
+    opp_pts: int
+    opp_rb_avg: float
+    opp_score: int
+    opp_stl: int
+    opp_turnover: int
+    opp_tot_reb: int
+    opponent: str
+    overtime: int
+    pf: int
+    pf_diff: int
+    ppg_avg: float
+    pts: int
+    ranked: int
+    rb_avg: float
+    season: str
+    stl: int
+    stl_diff: int
+    turnover: int
+    turnover_diff: int
+    tot_reb: int
+    tot_diff: int
+    weekday: int
+    win: int
+    year: int
+     
+class GameStat(GameStatBase, table=True):
+    __tablename__ = "gamestats"
+    
+    id: Optional[UUID] = Field(default_factory=uuid4, primary_key=True)
+    created_on: datetime.datetime = Field(default=datetime.datetime.utcnow())
+    last_modified: datetime.datetime = Field(default=datetime.datetime.utcnow())
+    
+class GameStatCreate(GameStatBase):
+    pass
+
+class GameStatRead(GameStatBase):
+    id: UUID
     
 # === Relational Model Views ===
 
