@@ -33,6 +33,7 @@ services:
       dockerfile: docker/Dockerfile
     platform: linux/amd64
     restart: unless-stopped
+    depends_on: [api]
     environment:
     - PYTHONUNBUFFERED=1
     volumes:

@@ -210,7 +210,7 @@ class GameStatBase(SQLModel):
     blk: int
     blk_diff: int
     cnu_score: int
-    date: datetime.date
+    date: datetime.date = Field(unique=True)
     day: int
     def_reb: int
     def_diff: int
@@ -242,7 +242,7 @@ class GameStatBase(SQLModel):
     opp_ft_percent: float
     opp_fta: int
     opp_ftm: int
-    opp_off: int
+    opp_off_reb: int
     opp_pf: int
     opp_ppg_avg: float
     opp_pts: int

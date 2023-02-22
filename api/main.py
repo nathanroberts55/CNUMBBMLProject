@@ -230,6 +230,12 @@ def read_gamestat(*, gamestat_id: int,  session: Session = Depends(get_session))
 @app.post("/gamestats/", response_model=GameStatRead)
 def create_gamestat(*, gamestat: GameStatCreate, session: Session = Depends(get_session)):
     db_gamestat = GameStat.from_orm(gamestat)
+    
+    # If there is a similar record determined by the unique date, raise duplicate record error
+    similar_game = session.exec(select(GameStat.date).where(GameStat.date == db_gamestat.date)).all()
+    if similar_game:
+        raise HTTPException(status_code=409, detail="Duplicate Game Stat Record")
+    
     session.add(db_gamestat)
     session.commit()
     session.refresh(db_gamestat)
