@@ -19,6 +19,7 @@ RUN chmod 0644 /etc/cron.d/crontab
 # --- Copy the Python Files to the container
 COPY data_cleaning.py /scraping/data_cleaning.py
 COPY scrape_data.py /scraping/scrape_data.py
+COPY save_data.py /scraping/save_data.py
 
 # --- Copy requirements.txt file to container
 COPY requirements.txt ./requirements.txt

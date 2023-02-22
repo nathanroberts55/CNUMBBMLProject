@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import re
 from scrape_data import scrape_data 
+from save_data import send_data
 
 #---- SCRAPE DATA TO DISK ----
 scrape_data()
@@ -231,5 +232,6 @@ combined_df = combined_df.reindex(sorted(combined_df.columns), axis=1)
 
 combined_df.to_csv('output/csv/cleaned_data.csv', index=False)
 
+send_data()
 #---- LOG MESSAGE
 print('DATA CLEANING COMPLETE...')
