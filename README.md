@@ -15,8 +15,7 @@ Giving my background in computer science, I was able to write a few scripts to c
 I decided to combine my tools that I was using into a one tool that could be generally available to all players, coaches, and fans of the Captains Basketball Program. This tool will be dashboard that serves as the home for the individual tools that I was using that comprises of:
 
 - Front End: Steamlit App
-- Back End: PostgreSQL DB
-- API: Fast API
+- Back End: Azure Storage
 - "Data Pipeline": Stats Web Scraper
 
 And in my professional work we have been using [Docker](https://www.docker.com/) which I was only vaguely familiar with I thought that I would Dockerize these components to deploy later using [Azure Container Apps](https://azure.microsoft.com/en-us/products/container-apps/) to get more familiar with the entire process.
@@ -27,17 +26,13 @@ I think the best way to make the application accessible for everyone is to give 
 
 So far I've loved it from the developer standpoint because it was easily intergrated into the data analysis that I was using in jupyter notebooks and I do little to no design work and the app looks great. There are definitely some tradeoffs but for the small applicaiton that this is, it works great for my use case currently.
 
-### Back End: PostgresSQL
+### Back End: Azure Storage
 
-I decided to use a PostgreSQL database because initially the way I setup the streamlit app to work was every time that it was initialized that it scraped the university's athletics page for the stats and saved them locally. And while that would've been fine for me, I assume that if the website got some decent traffic that the university wouldn't like all the request that I would be making to the page. So instead I will scrape the data periodically and save it to the database, that way if there's traffic I will bombard my own resources and not theirs.
-
-### API: FastAPI and SQLModel
-
-TRo communicate with the database mentioned above I decided to create an API, that way my front end can interface with the data but also to solve another problem. What would've made my initial capstone projects much easier to complete would have been if I had an easier way to access the data. So I plan to make the API generally available so other can use it for whatever purpose they may have for the data as well and it will arrive in a clean and structured manner.
+Currently, I am saving the data to local storage as a CSV. With Docker, I have been using a Docker volume to save these CSVs that the containers would use. In "production" I would want to be ablke to save and persist the data the same way. So I can create a Azure Storage ACcount to save the CSV files and mount the storage account to a Docker volume that can be used by all of the containers for persistant data storage.
 
 ### "Data Pipeline": Web Scraper
 
-Finally, I have my web scraper. I will have it in it's own Docker container that will run a cron job that will scrape the data at 12 AM on Tuesday Mornings during the basketball season to collect stats weekly and limit the amount of requests made to the team. I am hoping to also have the scraper use Pandas to clean and transform the data before sending the data to the database using the API that I have created. Hesitant to call it a pipeline as I'm not sure if it qualifies as a traditional data pipeline.
+Finally, I have my web scraper. I will have it in it's own Docker container that will run a cron job that will scrape the data at 12 AM on Tuesday Mornings during the basketball season to collect stats weekly and limit the amount of requests made to the team. I am hoping to also have the scraper use Pandas to clean and transform the data before saving the data to CSV in the Azure Storage account. Hesitant to call it a pipeline as I'm not sure if it qualifies as a traditional data pipeline.
 
 ## Future Work/Improvement Ideas
 
@@ -49,6 +44,5 @@ Here are some of the ideas that I have:
   - Predicts Over/Under of Stats for Players
   - Predicts Stat Lines for Players
   - Predicts Final Score of Game
-- API Authentication
 - Expand to All Teams in Conference (currently uses data from CNU's Website for only CNU Games)
 - CI/CD Pipeline for Updates
