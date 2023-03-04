@@ -1,28 +1,26 @@
-version: '3.7'
+version: '3'
 services:
   app:
-    build: 
-      context: ./app
-      dockerfile: Dockerfile
-    platform: linux/amd64
+    image: nater55/cnumbbmlproject-app:latest
+    container-name: cnumbbstats-app
     restart: unless-stopped
     volumes:
-      - ./output:/app/output
+      - output:/app/output
     command: streamlit run app.py --server.port=80
     ports:
       - 80:80
   web:
-    build:
-      context: ./scraping
-      dockerfile: Dockerfile
-    platform: linux/amd64
+    image: nater55/cnumbbmlproject-web:latest
+    container-name: cnumbbstats-scraper
     restart: unless-stopped
-    environment:
-    - PYTHONUNBUFFERED=1
     volumes:
-      - ./output:/scraping/output
+      - output:/scraping/output
     ports:
       - 8080:8080
 
 volumes:
   output:
+    driver: azure_file
+    driver_opts:
+     share_name: stats
+     storage_account_name: cnustatsstorage
