@@ -56,7 +56,7 @@ jobs:
       with:
         app-name: 'cnuStatsApp'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_7e4d854ef4d44bc3a0248386ef0c7cdd }}
+        # publish-profile: ${{ secrets.AzureAppService_PublishProfile_7e4d854ef4d44bc3a0248386ef0c7cdd }}
         configuration-file: ./azure-compose.yml
         images: |-
           'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}' 
