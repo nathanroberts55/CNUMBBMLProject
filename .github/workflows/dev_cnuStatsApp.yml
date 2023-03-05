@@ -61,7 +61,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         configuration-file: azure-compose.yml
-        app-name: 'cnustatsapp/development'
+        app-name: 'cnustatsapp'
         slot-name: 'development'
         images: |-
           'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}' 
