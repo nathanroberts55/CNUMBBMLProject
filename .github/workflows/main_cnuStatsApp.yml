@@ -65,4 +65,4 @@ jobs:
         images: |-
           'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}' 
           'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-web:${{ github.sha }}'
-        configuration-file: azure-compose.yml
+        docker-compose: azure-compose.yml
