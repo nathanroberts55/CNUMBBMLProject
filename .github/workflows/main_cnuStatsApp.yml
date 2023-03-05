@@ -51,19 +51,12 @@ jobs:
 
     steps:
     - name: Deploy App to Azure Web App
-      id: deploy-to-webapp-app
+      id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'cnuStatsApp'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_7e4d854ef4d44bc3a0248386ef0c7cdd }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}'
-
-    - name: Deploy Web to Azure Web App
-      id: deploy-to-webapp-web
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'cnuStatsApp'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_7e4d854ef4d44bc3a0248386ef0c7cdd }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-web:${{ github.sha }}'
+        images: |
+          'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}' 
+          'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-web:${{ github.sha }}'
