@@ -68,7 +68,7 @@ if view == 'Last Game Stats':
 
     prev_games = data.sort_values('date', ascending=False).head(int(num_games))
 
-
+    # TODO: Use num_games in the title of the graphs
     with row1_col1:
         total_rebs_chart = px.bar(prev_games, 
                             y=['tot', 'opp_tot'], 
