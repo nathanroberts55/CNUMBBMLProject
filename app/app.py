@@ -25,6 +25,14 @@ def get_data():
 
 data = get_data()
 
+# --- Remove Hamburger Menu | https://docs.streamlit.io/knowledge-base/using-streamlit/how-hide-hamburger-menu-app ---
+hide_menu_style = """
+        <style>
+        #MainMenu {visibility: hidden;}
+        </style>
+        """
+st.markdown(hide_menu_style, unsafe_allow_html=True)
+
 # --- SIDEBAR ---
 with st.sidebar:
     st.header('CNU Data Data Dashboard')
@@ -76,7 +84,7 @@ if view == 'Last Game Stats':
                             barmode='group', 
                             labels={"variable": "Team"}, 
                             hover_data=['off', 'def','opp_off', 'opp_def'],
-                            title='Total Rebounds Per Last 5 Games')
+                            title=f'Total Rebounds Per Last {num_games} Games')
         total_rebs_chart.update_layout(xaxis_title='Game', 
                                 yaxis_title='Total Rebounds')
         
@@ -87,7 +95,7 @@ if view == 'Last Game Stats':
         x='opponent', 
         barmode='group', 
         labels={"variable": "Team"}, 
-        title='Total Turnovers Per Last 5 Games')
+        title=f'Total Turnovers Per Last {num_games} Games')
         total_turnover_chart.update_layout(xaxis_title='Game', 
                                         yaxis_title='Total Rebounds')
         
@@ -101,7 +109,7 @@ if view == 'Last Game Stats':
                             values=[fg_taken,threes_taken], 
                             names=['Field Goals Attempted', 'Threes Attempted'], 
                             hole=0.3, 
-                            title='Shot Makeup Over Last 5 Games')
+                            title=f'Shot Makeup Over Last {num_games} Games')
         total_shots.update_traces(textposition='outside', 
                                 textinfo='label+percent')
         
