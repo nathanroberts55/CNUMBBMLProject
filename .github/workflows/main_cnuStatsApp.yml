@@ -14,7 +14,8 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -50,11 +51,11 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Azure Login
+    - name: Login to Azure
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AzureAppService_PublishProfile_7e4d854ef4d44bc3a0248386ef0c7cdd }}
-        
+
     - name: Deploy App to Azure Web App
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
