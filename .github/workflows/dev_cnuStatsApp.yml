@@ -43,26 +43,26 @@ jobs:
         tags: nater55/cnumbbmlproject-web:${{ github.sha }}
         file: ./scraping/Dockerfile
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   environment:
+  #     name: 'development'
+  #     url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-    steps:
-    - name: Login via Az module
-      uses: azure/login@v1
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
+  #   steps:
+  #   - name: Login via Az module
+  #     uses: azure/login@v1
+  #     with:
+  #       creds: ${{secrets.AZURE_CREDENTIALS}}
 
-    - name: Deploy App to Azure Web App
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        configuration-file: azure-compose.yml
-        app-name: 'cnustatsapp'
-        slot-name: 'development'
-        images: |-
-          'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}' 
-          'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-web:${{ github.sha }}'
+  #   - name: Deploy App to Azure Web App
+  #     id: deploy-to-webapp
+  #     uses: azure/webapps-deploy@v2
+  #     with:
+  #       configuration-file: azure-compose.yml
+  #       app-name: 'cnustatsapp'
+  #       slot-name: 'development'
+  #       images: |-
+  #         'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}' 
+  #         'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-web:${{ github.sha }}'
