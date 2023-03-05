@@ -26,21 +26,12 @@ jobs:
         username: ${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}
         password: ${{ secrets.AzureAppService_ContainerPassword_e7819aeed4ed40f7a3938fbdbae9df93 }}
 
-    - name: Build and push App container image to registry
+    - name: Build and push container image to registry
       uses: docker/build-push-action@v2
       with:
         push: true
-        context: ./app
-        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }},latest
-        file: ./app/Dockerfile
-
-    - name: Build and push Web container image to registry
-      uses: docker/build-push-action@v2
-      with:
-        push: true
-        context: ./scraping
-        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-web:${{ github.sha }},latest
-        file: ./scraping/Dockerfile
+        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}
+        file: ./Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,20 +41,11 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Deploy App to Azure Web App
-      id: deploy-to-webapp1
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'cnuStatsApp'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_7e4d854ef4d44bc3a0248386ef0c7cdd }}
         images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}'
-
-    - name: Deploy Web to Azure Web App
-      id: deploy-to-webapp2
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'cnuStatsApp'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_7e4d854ef4d44bc3a0248386ef0c7cdd }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-web:${{ github.sha }}'
