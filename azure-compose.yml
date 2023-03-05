@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: nater55/cnumbbmlproject-web
+    image: nater55/cnumbbmlproject-web:dev
     container-name: cnumbbstats-scraper
     restart: unless-stopped
     volumes:
@@ -9,7 +9,7 @@ services:
     ports:
       - 8080:8080
   app:
-    image: nater55/cnumbbmlproject-app
+    image: nater55/cnumbbmlproject-app:dev
     container-name: cnumbbstats-app
     depends-on:
       - web

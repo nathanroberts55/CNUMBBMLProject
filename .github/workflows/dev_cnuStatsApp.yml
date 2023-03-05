@@ -32,7 +32,7 @@ jobs:
       with:
         push: true
         context: ./app
-        tags: nater55/cnumbbmlproject-app:latest
+        tags: nater55/cnumbbmlproject-app:dev
         file: ./app/Dockerfile
 
     - name: Build and push container Web image to registry
@@ -40,7 +40,7 @@ jobs:
       with:
         push: true
         context: ./scraping
-        tags: nater55/cnumbbmlproject-web:latest
+        tags: nater55/cnumbbmlproject-web:dev
         file: ./scraping/Dockerfile
 
   # deploy:
