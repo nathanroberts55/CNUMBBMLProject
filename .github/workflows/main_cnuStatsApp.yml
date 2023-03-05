@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         context: ./app
-        tags: nater55/cnumbbmlproject-app:${{ github.sha }},latest
+        tags: nater55/cnumbbmlproject-app:${{ github.sha }}
         file: ./app/Dockerfile
 
     - name: Build and push container Web image to registry
@@ -39,7 +39,7 @@ jobs:
       with:
         push: true
         context: ./scraping
-        tags: nater55/cnumbbmlproject-web:${{ github.sha }},latest
+        tags: nater55/cnumbbmlproject-web:${{ github.sha }}
         file: ./scraping/Dockerfile
 
   deploy:
