@@ -30,7 +30,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        context: ./app
+        context: /app
         tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-app:${{ github.sha }}
         file: Dockerfile
 
@@ -38,7 +38,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        context: ./scraper
+        context: /scraper
         tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_264c9a4b8acd41ef96e3fbe0b252a0bc }}/nater55/cnumbbmlproject-web:${{ github.sha }}
         file: Dockerfile
 
