@@ -1,22 +1,24 @@
 version: '3'
 services:
-  app:
-    image: nater55/cnumbbmlproject-app:latest
-    container-name: cnumbbstats-app
-    restart: unless-stopped
-    volumes:
-      - output:/app/output
-    command: streamlit run app.py --server.port=80
-    ports:
-      - 80:80
   web:
-    image: nater55/cnumbbmlproject-web:latest
+    image: nater55/cnumbbmlproject-web
     container-name: cnumbbstats-scraper
     restart: unless-stopped
     volumes:
       - output:/scraping/output
     ports:
       - 8080:8080
+  app:
+    image: nater55/cnumbbmlproject-app
+    container-name: cnumbbstats-app
+    depends-on:
+      - web
+    restart: unless-stopped
+    volumes:
+      - output:/app/output
+    command: streamlit run app.py --server.port=80
+    ports:
+      - 80:80
 
 volumes:
   output:
