@@ -328,28 +328,28 @@ if view == 'Overall Stats':
     season_data['consecutive_wins'] = season_data.win.groupby((season_data.win != season_data.win.shift()).cumsum()).transform('size') * season_data.win
     
     
-    row4_col1, row4_col2, row4_col3 = st.columns(3)
-    row5_col1, row5_col2, row5_col3 = st.columns(3)
-    row6_col1, row6_col2 = st.columns(2)
+    row1_col1, row1_col2, row1_col3 = st.columns(3)
+    row2_col1, row2_col2, row2_col3 = st.columns(3)
+    row3_col1, row3_col2 = st.columns(2)
     
     # Season Record
-    with row4_col1:
+    with row1_col1:
         season_wins, season_losses = season_data.win.value_counts()
         st.markdown(f"<h4 style='text-align: center;'>Season Record (W/L)</h4>", unsafe_allow_html=True)
         st.markdown(f"<p style='text-align: center; font-weight: bold;'>{season_wins}-{season_losses}</p>", unsafe_allow_html=True)
     # Season Win Percentage
-    with row4_col2:
+    with row1_col2:
         win_percentage = '{:.3f}'.format(season_wins/(season_wins+season_losses))
         st.markdown(f"<h4 style='text-align: center;'>Season Win Percentage</h4>", unsafe_allow_html=True)
         st.markdown(f"<p style='text-align: center; font-weight: bold;'>{win_percentage}</p>", unsafe_allow_html=True)
     # Longest Win Streak
-    with row4_col3:
+    with row1_col3:
         longest_win_streak = season_data['consecutive_wins'].max()
         st.markdown(f"<h4 style='text-align: center;'>Longest Win Streak</h4>", unsafe_allow_html=True)
         st.markdown(f"<p style='text-align: center; font-weight: bold;'>{longest_win_streak}</p>", unsafe_allow_html=True)
     
     # Avg. Win Margin
-    with row5_col1:
+    with row2_col1:
         wins = season_data[season_data['win'] == 1].copy()
         wins['win_margin'] = wins['cnu_score'] - wins['opp_score']
         avg_win_margin = '{:.2f}'.format(wins.loc[:, 'win_margin'].mean())
@@ -357,27 +357,27 @@ if view == 'Overall Stats':
         st.markdown(f"<h4 style='text-align: center;'>Average Win Margin</h4>", unsafe_allow_html=True)
         st.markdown(f"<p style='text-align: center; font-weight: bold;'>{avg_win_margin}</p>", unsafe_allow_html=True)
     # Avg. PPG
-    with row5_col2:
+    with row2_col2:
         avg_ppg = '{:.2f}'.format(season_data.loc[:, 'cnu_score'].mean())
         
         st.markdown(f"<h4 style='text-align: center;'>Average CNU PPG</h4>", unsafe_allow_html=True)
         st.markdown(f"<p style='text-align: center; font-weight: bold;'>{avg_ppg}</p>", unsafe_allow_html=True)
     # Avg. Opp PPG
-    with row5_col3:
+    with row2_col3:
         avg_opp_ppg = '{:.2f}'.format(season_data.loc[:, 'opp_score'].mean())
         
         st.markdown(f"<h4 style='text-align: center;'>Average Opponent PPG</h4>", unsafe_allow_html=True)
         st.markdown(f"<p style='text-align: center; font-weight: bold;'>{avg_opp_ppg}</p>", unsafe_allow_html=True)
         
     # Home Record
-    with row6_col1:
+    with row3_col1:
         home = season_data[season_data['home'] == 1].copy()
         home_win, home_loss = home.win.value_counts()
 
         st.markdown(f"<h4 style='text-align: center;'>Home Record</h4>", unsafe_allow_html=True)
         st.markdown(f"<p style='text-align: center; font-weight: bold;'>{home_win}-{home_loss}</p>", unsafe_allow_html=True)
     # Away Record
-    with row6_col2:
+    with row3_col2:
         away = season_data[season_data['home'] == 0].copy()
         away_win, away_loss = away.win.value_counts()
         
