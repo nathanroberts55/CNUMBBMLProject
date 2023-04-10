@@ -232,6 +232,6 @@ combined_df = combined_df.reindex(sorted(combined_df.columns), axis=1)
 
 combined_df.to_csv('output/csv/cleaned_data.csv', index=False)
 
-send_data()
+# send_data()
 #---- LOG MESSAGE
 print('DATA CLEANING COMPLETE...')
