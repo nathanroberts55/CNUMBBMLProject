@@ -1,4 +1,4 @@
 # START CRON JOB
-0 12 * 1,2,3,10,11,12 TUE cd /scraping && /usr/local/bin/python3 -u /scraping/data_cleaning.py > /proc/1/fd/1 2>/proc/1/fd/2
+0 12 * 1,2,3,4,10,11,12 TUE cd /scraping && /usr/local/bin/python3 -u /scraping/data_cleaning.py > /proc/1/fd/1 2>/proc/1/fd/2
 @reboot cd /scraping && /usr/local/bin/python3 -u /scraping/data_cleaning.py > /proc/1/fd/1 2>/proc/1/fd/2
 # END CRON JOB

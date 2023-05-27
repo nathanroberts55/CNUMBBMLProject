@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 # ---- PAGE CONFIG ----
 st.set_page_config(
     page_title="CNU Basketball Data Dashboard",
-    page_icon="🏀",
+    page_icon="	:trophy:",
     layout='wide',
     initial_sidebar_state='collapsed'
 )
@@ -39,13 +39,14 @@ with st.sidebar:
     
     view = st.selectbox(
         'Choose Data View',
-        ('Last Game Stats', 'Scouting'),
+        ('Last Game Stats', 'Overall Stats', 'Scouting'),
         key='ViewSelectBox')
 
 
 # ---- DATA HEADER ----
 
 st.title('CNUMBB Data Dashboard')
+st.markdown('Statistics on the defending 2022-2023 Men\'s DIII National Champions')
 st.markdown(" --- ")
 
 if view == 'Last Game Stats':
@@ -223,3 +224,169 @@ if view == 'Scouting':
     st.subheader(f'Full Game Data vs {team}')
 
     st.dataframe(data=team_data[table_cols].sort_values('date', ascending=False).set_index('opponent'))
+    
+if view == 'Overall Stats':
+    st.subheader("Overall Statistics")
+    st.markdown("These statistics are representative of the data collected from the last 12 years of CNU Men's Basketball. During these years the team has been led by Head Coach John Kirkorian.")
+    
+    # --- OVERALL STATS ---
+    row1_col1, row1_col2, row1_col3 = st.columns(3)
+    row2_col1, row2_col2, row2_col3 = st.columns(3)
+    row3_col1, row3_col2 = st.columns(2)
+    row4_col1, row4_col2 = st.columns(2)
+    # Wins and Loss Counts
+    wins, losses = data.win.value_counts()
+    
+    # Total Win/Loss
+    with row1_col1:
+        st.markdown(f"<h4 style='text-align: center;'>Overall Record (W/L)</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{wins}-{losses}</p>", unsafe_allow_html=True)
+    # Winning Percentage
+    with row1_col2:
+        win_percentage = '{:.3f}'.format(wins/(wins+losses))
+        st.markdown(f"<h4 style='text-align: center;'>Overall Win Percentage</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{win_percentage}</p>", unsafe_allow_html=True)
+    # Most Wins in a Season
+    with row1_col3:
+        most_wins = data.groupby('season')['win'].sum('win').max()
+        st.markdown(f"<h4 style='text-align: center;'>Most Wins in a Season</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{most_wins}</p>", unsafe_allow_html=True)
+
+    # Home Record
+    with row2_col1:
+        home = data[data['home'] == 1].copy()
+        home_win, home_loss = home.win.value_counts()
+
+        st.markdown(f"<h4 style='text-align: center;'>Home Record</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{home_win}-{home_loss}</p>", unsafe_allow_html=True)
+    # Away Record
+    with row2_col2:
+        away = data[data['home'] == 0].copy()
+        away_win, away_loss = away.win.value_counts()
+        
+        st.markdown(f"<h4 style='text-align: center;'>Away Record</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{away_win}-{away_loss}</p>", unsafe_allow_html=True)
+    # Avg. Opp PPG
+    with row2_col3:
+        ranked = data[data['ranked'] == 1].copy()
+        ranked_win, ranked_loss = ranked.win.value_counts()
+        
+        st.markdown(f"<h4 style='text-align: center;'>Record Against Ranked Opp.</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{ranked_win}-{ranked_loss}</p>", unsafe_allow_html=True)
+    
+    # Most Wins in a Season
+    with row3_col1:
+        wins_by_season = data.groupby('season')[['win']].sum('win').sort_values('win', ascending=True).tail(5)
+        wins_line_chart = px.bar(wins_by_season,
+                                 x='win',
+                                 y=wins_by_season.index,
+                                 text_auto=True,
+                                 title="Most Wins in a Season")
+        st.plotly_chart(wins_line_chart)
+    with row3_col2:
+        total_wins = px.pie(data, 
+                            values=[wins, losses], 
+                            names=['Wins', 'Losses'], 
+                            hole=0.3, 
+                            title=f'Total Wins vs Losses')
+        total_wins.update_traces(textposition='outside', 
+                                textinfo='label+percent',
+                                rotation=65)
+        st.plotly_chart(total_wins)
+    
+    with row4_col1:
+        points_dist = px.histogram(data,
+                                        x='cnu_score',
+                                        text_auto=True,
+                                        title="Overall Points Per Game Distribution",
+                                        )
+        points_dist.update_layout(bargap=0.2)
+        st.plotly_chart(points_dist)
+    # Win Margin Per Season
+    with row4_col2:
+        win_margin = data[data['win'] == 1].copy()
+        win_margin['win_margin'] = win_margin['cnu_score'] - win_margin['opp_score']
+        win_margin = win_margin.groupby('season')[['win_margin']].mean('win_margin')
+        win_margin = win_margin.sort_values('win_margin', ascending=True).head(5)
+        win_marging_chart = px.bar(win_margin,
+               x='win_margin',
+               y=win_margin.index,
+               title='Highest Average Win Margin by Season',
+               text_auto=True)
+        st.plotly_chart(win_marging_chart)
+        
+    # --- CURRENT SEASON OVERALL STATS ---
+    st.subheader("Season Statistics")
+    st.markdown("Selecting a season from the dropdown below will provide more detailed statistical analysis of the season selected.")
+    # Season Selection
+    season = st.selectbox(
+        'Select a Season',
+        data.season.unique(),
+        key='OverallSeasonSelectBox')
+    
+    season_data = data[data['season'] == season].copy()
+    season_data['consecutive_wins'] = season_data.win.groupby((season_data.win != season_data.win.shift()).cumsum()).transform('size') * season_data.win
+    
+    
+    row1_col1, row1_col2, row1_col3 = st.columns(3)
+    row2_col1, row2_col2, row2_col3 = st.columns(3)
+    row3_col1, row3_col2 = st.columns(2)
+    
+    # Season Record
+    with row1_col1:
+        season_wins, season_losses = season_data.win.value_counts()
+        st.markdown(f"<h4 style='text-align: center;'>Season Record (W/L)</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{season_wins}-{season_losses}</p>", unsafe_allow_html=True)
+    # Season Win Percentage
+    with row1_col2:
+        win_percentage = '{:.3f}'.format(season_wins/(season_wins+season_losses))
+        st.markdown(f"<h4 style='text-align: center;'>Season Win Percentage</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{win_percentage}</p>", unsafe_allow_html=True)
+    # Longest Win Streak
+    with row1_col3:
+        longest_win_streak = season_data['consecutive_wins'].max()
+        st.markdown(f"<h4 style='text-align: center;'>Longest Win Streak</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{longest_win_streak}</p>", unsafe_allow_html=True)
+    
+    # Avg. Win Margin
+    with row2_col1:
+        wins = season_data[season_data['win'] == 1].copy()
+        wins['win_margin'] = wins['cnu_score'] - wins['opp_score']
+        avg_win_margin = '{:.2f}'.format(wins.loc[:, 'win_margin'].mean())
+        
+        st.markdown(f"<h4 style='text-align: center;'>Average Win Margin</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{avg_win_margin}</p>", unsafe_allow_html=True)
+    # Avg. PPG
+    with row2_col2:
+        avg_ppg = '{:.2f}'.format(season_data.loc[:, 'cnu_score'].mean())
+        
+        st.markdown(f"<h4 style='text-align: center;'>Average CNU PPG</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{avg_ppg}</p>", unsafe_allow_html=True)
+    # Avg. Opp PPG
+    with row2_col3:
+        avg_opp_ppg = '{:.2f}'.format(season_data.loc[:, 'opp_score'].mean())
+        
+        st.markdown(f"<h4 style='text-align: center;'>Average Opponent PPG</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{avg_opp_ppg}</p>", unsafe_allow_html=True)
+        
+    # Home Record
+    with row3_col1:
+        home = season_data[season_data['home'] == 1].copy()
+        home_win, home_loss = home.win.value_counts()
+
+        st.markdown(f"<h4 style='text-align: center;'>Home Record</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{home_win}-{home_loss}</p>", unsafe_allow_html=True)
+    # Away Record
+    with row3_col2:
+        away = season_data[season_data['home'] == 0].copy()
+        away_win, away_loss = away.win.value_counts()
+        
+        st.markdown(f"<h4 style='text-align: center;'>Away Record</h4>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; font-weight: bold;'>{away_win}-{away_loss}</p>", unsafe_allow_html=True)
+    
+    
+    
+    # --- GAME DATA ---
+    st.subheader(f'Team Stats for {season} Season')
+
+    st.dataframe(data=season_data[table_cols].sort_values('date', ascending=False).set_index('opponent'))
