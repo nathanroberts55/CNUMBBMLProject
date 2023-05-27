@@ -1,18 +1,6 @@
 version: '3.7'
 
 services:
-
-  app:
-    build: 
-      context: ./app
-      dockerfile: Dockerfile
-    platform: linux/amd64
-    restart: unless-stopped
-    volumes:
-      - ./output:/app/output
-    command: streamlit run app.py --server.port=80
-    ports:
-      - 80:80
   web:
     build:
       context: ./scraping
@@ -25,6 +13,19 @@ services:
       - ./output:/scraping/output
     ports:
       - 8080:8080
+  app:
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    depends_on:
+      - web
+    platform: linux/amd64
+    restart: unless-stopped
+    volumes:
+      - ./output:/app/output
+    command: streamlit run app.py --server.port=80
+    ports:
+      - 80:80
 
 volumes:
   output:
