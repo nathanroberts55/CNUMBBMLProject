@@ -7,12 +7,10 @@ services:
     volumes:
       - output:/scraping/output
     ports:
-      - 8080:8080
+      - 8080:8080 # Remove for Prod Deployment to Azure Web Apps
   app:
     image: nater55/cnumbbmlproject-app:dev
     container-name: cnumbbstats-app
-    depends-on:
-      - web
     restart: unless-stopped
     volumes:
       - output:/app/output
@@ -24,5 +22,5 @@ volumes:
   output:
     driver: azure_file
     driver_opts:
-     share_name: stats
-     storage_account_name: cnustatsstorage
+      share_name: stats
+      storage_account_name: cnustatsstorage
